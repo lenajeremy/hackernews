@@ -1,0 +1,4 @@
+- set up the API
+- set up redux toolkit
+- set up the sqlite3 database
+- start constructing the UI
