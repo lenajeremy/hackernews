@@ -1,8 +1,9 @@
 const HACKERNEWS_API : string = 'https://hacker-news.firebaseio.com/v0';
 
-enum RouteNames {
-    newsScreen = 'News Screen',
-    aboutScreen = 'About Screen',
+const RouteNames  = {
+    newsScreen: 'News Screen',
+    aboutScreen: 'About Screen',
+    storyScreen: 'Story Screen'
 }
 
 export {HACKERNEWS_API, RouteNames}

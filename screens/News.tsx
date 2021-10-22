@@ -6,7 +6,7 @@ import {
     Text,
     ActivityIndicator,
     StyleSheet,
-    Image
+    useColorScheme,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -16,16 +16,30 @@ import axios from '../axios';
 import { AxiosResponse } from 'axios';
 import { Skeleton, Header } from '../components'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/core';
+import { RouteNames } from '../constants';
 
 
 function NewsScreen() {
+
+    const [pageNumber, setPageNumber] = useState(0);
+    const isDarkMode = useColorScheme() === 'dark';
+
+    const STORIES_PER_PAGE = 10;
+
 
     const dispatch = useDispatch();
     const [refreshing, setRefreshing] = useState(false)
     const { news, errorMessage, isFetching, isSuccess } = useSelector(newsSelector);
 
     useEffect(() => {
-        dispatch(getStories({ start: 0, end: 20, storyType: StoryType.new }))
+        dispatch(getStories(
+            {
+                start: (pageNumber * STORIES_PER_PAGE),
+                end: (pageNumber + 1) * STORIES_PER_PAGE,
+                storyType: StoryType.new,
+            }
+        ));
     }, [])
 
     function _renderNews({ item: item }: { item: number }) {
@@ -44,7 +58,18 @@ function NewsScreen() {
         }, 2000)
     }
 
-    if(!isSuccess){
+    function loadMoreStories() {
+        // dispatch(getStories(
+        //     {
+        //         start: pageNumber + 1,
+        //         end: (pageNumber + 1) * STORIES_PER_PAGE,
+        //         storyType: StoryType.new,
+        //         operation: 'append'
+        //     }
+        // ))
+    }
+
+    if (!isSuccess) {
         return (
             <Text>{errorMessage}</Text>
         )
@@ -57,13 +82,20 @@ function NewsScreen() {
         )
     } else {
         return (
-            <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
+            <SafeAreaView style={{ backgroundColor: isDarkMode ? '#111' : 'white', flex: 1 }}>
                 <Header title='Hackernews' />
                 <FlatList
+                    contentContainerStyle={{
+                        marginTop: 10
+                    }
+                    }
                     onRefresh={refresh}
                     refreshing={refreshing}
                     data={news}
                     renderItem={_renderNews}
+                    onEndReached={loadMoreStories}
+                    onEndReachedThreshold={0.1}
+                    ListFooterComponent={<ActivityIndicator style={{ marginBottom: 30 }} />}
                 />
             </SafeAreaView>
         )
@@ -72,16 +104,17 @@ function NewsScreen() {
 
 const COLORS = [
     'orange',
-    'crimson',
-    'tomato',
+    'hotpink',
     'lightgreen',
-    'lightblue',
-    'pink',
+    'blue',
     'green'
 ]
 
 
 const NewsType: React.FC<{ type: StoryType, item: number }> = ({ type, item }) => {
+
+    const isDarkMode = useColorScheme() === 'dark';
+    const navigation = useNavigation()
 
     interface StoryItem {
         id: number,
@@ -121,7 +154,7 @@ const NewsType: React.FC<{ type: StoryType, item: number }> = ({ type, item }) =
                     url: story.url,
                     poster: story.by,
                     timePosted: story.time,
-                    comments: story.kids, 
+                    comments: story.kids,
                     likes: story.score
                 });
 
@@ -134,15 +167,15 @@ const NewsType: React.FC<{ type: StoryType, item: number }> = ({ type, item }) =
             }
         }
 
-        getStory({id: item});
+        getStory({ id: item });
     }, []);
 
-    const getTime = (time : number) =>{
+    const getTime = (time: number) => {
         const nowDate = new Date();
         const createdDate = new Date(time * 1000);
 
         const timeDifference = nowDate.getTime() - createdDate.getTime()
-        
+
         const SECONDS = Math.round(timeDifference / 1000);
         const MINUTES = Math.round(timeDifference / (1000 * 60));
         const HOURS = Math.round(timeDifference / (1000 * 60 * 60));
@@ -153,31 +186,31 @@ const NewsType: React.FC<{ type: StoryType, item: number }> = ({ type, item }) =
 
         console.log(timeDifference)
 
-        if(YEARS > 0) return YEARS + `yr${YEARS > 1 ? 's' : ''} ago`
-        else if(MONTHS > 0) return MONTHS + `mth${MONTHS > 1 ? 's' : ''} ago`
-        else if(WEEKS > 0) return WEEKS + `wk${WEEKS > 1 ? 's' : ''} ago`
-        else if(DAYS > 0) return DAYS + `day${DAYS > 1 ? 's' : ''} ago`
-        else if(HOURS > 0) return HOURS + `hr${HOURS > 1 ? 's' : ''} ago`
-        else if(MINUTES > 0) return MINUTES + `min${MINUTES > 1 ? 's' : ''} ago`
+        if (YEARS > 0) return YEARS + `yr${YEARS > 1 ? 's' : ''} ago`
+        else if (MONTHS > 0) return MONTHS + `mth${MONTHS > 1 ? 's' : ''} ago`
+        else if (WEEKS > 0) return WEEKS + `wk${WEEKS > 1 ? 's' : ''} ago`
+        else if (DAYS > 0) return DAYS + `day${DAYS > 1 ? 's' : ''} ago`
+        else if (HOURS > 0) return HOURS + `hr${HOURS > 1 ? 's' : ''} ago`
+        else if (MINUTES > 0) return MINUTES + `min${MINUTES > 1 ? 's' : ''} ago`
     }
 
     if (loaded) {
         return (
-            <TouchableOpacity style={{ marginVertical: 4 }}>
+            <TouchableOpacity style={{ marginVertical: 4 }} onPress={() => navigation.navigate(RouteNames.storyScreen as never, { story })}>
                 <View style={styles.loadingNewsContainer}>
                     <View style={[styles.news, { backgroundColor: COLORS[Math.floor(Math.random() * COLORS.length)] }]}>
                         <Text style={styles.posterText}>{story.poster.charAt(0).concat(story.poster.charAt(1))}</Text>
                     </View>
                     <View style={{ width: '80%', }}>
-                        <Text style={styles.topText}>{story?.text}</Text>
-                        <View style = {{flexDirection: 'row'}}>
-                            <Text style={styles.storiesDetails}>
-                                { story.poster }
+                        <Text style={[styles.topText, { color: isDarkMode ? 'white' : '#111' }]}>{story?.text}</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={[styles.storiesDetails, {color: isDarkMode ? 'gray': '#333'}]}>
+                                {story.poster}
                             </Text>
-                            <Text style={styles.storiesDetails}>
+                            <Text style={[styles.storiesDetails, {color: isDarkMode ? 'gray': '#333'}]}>
                                 {getTime(story.timePosted)}
                             </Text>
-                            <Text style = {styles.storiesDetails}>
+                            <Text style={[styles.storiesDetails, {color: isDarkMode ? 'gray': '#333'}]}>
                                 {story.likes} likes
                             </Text>
                         </View>
@@ -214,12 +247,12 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
     },
     topText: {
+        color: 'white',
         fontSize: 16
     },
     storiesDetails: {
         fontSize: 14,
-        color: 'gray',
-        marginRight: 5,
+        marginRight: 6,
         marginTop: 3
     }
 })

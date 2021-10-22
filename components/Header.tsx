@@ -3,14 +3,18 @@ import React from 'react';
 import { 
     StyleSheet, 
     Text, 
-    View 
+    View,
+    useColorScheme
 } from 'react-native';
 
 
 const Header : React.FC<{title: string}> = ({title}) => {
+
+    const isDarkMode = useColorScheme() === 'dark';
+
     return (
         <View style = {styles.header}>
-            <Text style = {styles.headerText}>
+            <Text style = {[styles.headerText, {color: isDarkMode ? 'white' : 'black'}]}>
                 {title}
             </Text>
         </View>

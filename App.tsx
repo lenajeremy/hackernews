@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 
 /* SCREENS */
-import { AboutMe, News } from './screens';
+import { AboutMe, News, StoryWebView } from './screens';
 import store from './store';
 
 
@@ -32,6 +32,11 @@ const Component: React.FC = () => {
         <Stack.Screen
           name = {RouteNames.aboutScreen}
           component = {AboutMe}
+        />
+
+        <Stack.Screen
+          name = {RouteNames.storyScreen}
+          component = {StoryWebView}
         />
       </Stack.Navigator>
     </NavigationContainer>
