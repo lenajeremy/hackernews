@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import {
+    SafeAreaView,
     View,
     FlatList,
     Text,
     ActivityIndicator,
     StyleSheet,
-    StatusBar
+    Image
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -13,17 +14,18 @@ import { StoryType } from '../store/types';
 import { getStories, newsSelector } from '../store/newsSlice';
 import axios from '../axios';
 import { AxiosResponse } from 'axios';
+import { Skeleton, Header } from '../components'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 function NewsScreen() {
 
     const dispatch = useDispatch();
+    const [refreshing, setRefreshing] = useState(false)
     const { news, errorMessage, isFetching, isSuccess } = useSelector(newsSelector);
 
     useEffect(() => {
-        // dispatch(getStories({ start: 0, end: 10, storyType: StoryType.top }))
+        dispatch(getStories({ start: 0, end: 20, storyType: StoryType.new }))
     }, [])
 
     function _renderNews({ item: item }: { item: number }) {
@@ -33,61 +35,98 @@ function NewsScreen() {
         )
     }
 
+    function refresh() {
+        setRefreshing(true);
+        setTimeout(() => {
+            return new Promise(resolve => {
+                setRefreshing(false)
+            })
+        }, 2000)
+    }
 
+    if(!isSuccess){
+        return (
+            <Text>{errorMessage}</Text>
+        )
+    }
     if (isFetching) {
         return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <ActivityIndicator size='large' />
+                <ActivityIndicator />
             </View>
         )
     } else {
         return (
-            <View>
+            <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
+                <Header title='Hackernews' />
                 <FlatList
+                    onRefresh={refresh}
+                    refreshing={refreshing}
                     data={news}
                     renderItem={_renderNews}
                 />
-            </View>
+            </SafeAreaView>
         )
     }
 }
 
-
+const COLORS = [
+    'orange',
+    'crimson',
+    'tomato',
+    'lightgreen',
+    'lightblue',
+    'pink',
+    'green'
+]
 
 
 const NewsType: React.FC<{ type: StoryType, item: number }> = ({ type, item }) => {
 
     interface StoryItem {
-        title: string,
+        id: number,
         text: string,
         url: string,
         poster: string,
-        timePosted: string,
-        comments: number[]
+        timePosted: number,
+        comments: number[],
+        likes: number,
     }
 
     const [loaded, setLoaded] = useState(false);
-    const [story, setStory] = useState<StoryItem>();
+    const [story, setStory] = useState<StoryItem>({
+        text: '',
+        url: '',
+        poster: '',
+        timePosted: 0,
+        comments: [],
+        id: item,
+        likes: 0
+    });
 
     useEffect(() => {
         const getStory = async ({ id }: { id: number }) => {
 
             console.log('getting', id)
             try {
-                const response: AxiosResponse = await axios.get('/item/story' + id)
+                const response: AxiosResponse = await axios.get('/item/' + id + '.json')
 
                 const story: any = response.data;
 
                 console.log(story)
 
                 setStory({
-                    text: story.text,
-                    title: story.title,
+                    id: item,
+                    text: story.title,
                     url: story.url,
-                    poster: story.poster,
-                    timePosted: story.timePosted,
-                    comments: story.comments
+                    poster: story.by,
+                    timePosted: story.time,
+                    comments: story.kids, 
+                    likes: story.score
                 });
+
+                setLoaded(true);
+
 
             } catch (error) {
                 console.log(error)
@@ -95,68 +134,93 @@ const NewsType: React.FC<{ type: StoryType, item: number }> = ({ type, item }) =
             }
         }
 
-        // getStory({id: item});
+        getStory({id: item});
     }, []);
+
+    const getTime = (time : number) =>{
+        const nowDate = new Date();
+        const createdDate = new Date(time * 1000);
+
+        const timeDifference = nowDate.getTime() - createdDate.getTime()
+        
+        const SECONDS = Math.round(timeDifference / 1000);
+        const MINUTES = Math.round(timeDifference / (1000 * 60));
+        const HOURS = Math.round(timeDifference / (1000 * 60 * 60));
+        const DAYS = Math.round(timeDifference / (1000 * 60 * 60 * 24));
+        const WEEKS = Math.round(timeDifference / (1000 * 60 * 60 * 24 * 7));
+        const MONTHS = Math.round(timeDifference / (1000 * 60 * 60 * 24 * 7 * 4));
+        const YEARS = Math.round(timeDifference / (1000 * 60 * 60 * 24 * 7 * 4 * 12));
+
+        console.log(timeDifference)
+
+        if(YEARS > 0) return YEARS + `yr${YEARS > 1 ? 's' : ''} ago`
+        else if(MONTHS > 0) return MONTHS + `mth${MONTHS > 1 ? 's' : ''} ago`
+        else if(WEEKS > 0) return WEEKS + `wk${WEEKS > 1 ? 's' : ''} ago`
+        else if(DAYS > 0) return DAYS + `day${DAYS > 1 ? 's' : ''} ago`
+        else if(HOURS > 0) return HOURS + `hr${HOURS > 1 ? 's' : ''} ago`
+        else if(MINUTES > 0) return MINUTES + `min${MINUTES > 1 ? 's' : ''} ago`
+    }
 
     if (loaded) {
         return (
-            <SafeAreaView>
-                <Text>{item}</Text>
-            </SafeAreaView>
+            <TouchableOpacity style={{ marginVertical: 4 }}>
+                <View style={styles.loadingNewsContainer}>
+                    <View style={[styles.news, { backgroundColor: COLORS[Math.floor(Math.random() * COLORS.length)] }]}>
+                        <Text style={styles.posterText}>{story.poster.charAt(0).concat(story.poster.charAt(1))}</Text>
+                    </View>
+                    <View style={{ width: '80%', }}>
+                        <Text style={styles.topText}>{story?.text}</Text>
+                        <View style = {{flexDirection: 'row'}}>
+                            <Text style={styles.storiesDetails}>
+                                { story.poster }
+                            </Text>
+                            <Text style={styles.storiesDetails}>
+                                {getTime(story.timePosted)}
+                            </Text>
+                            <Text style = {styles.storiesDetails}>
+                                {story.likes} likes
+                            </Text>
+                        </View>
+                    </View>
+
+                </View>
+            </TouchableOpacity>
         );
     } else {
-        return (
-            <SafeAreaView style = {{backgroundColor: 'white'}}>
-                <LoadingNews />
-            </SafeAreaView>
-        )
+        return <Skeleton />
     }
 }
 
 
-const LoadingNews: React.FC = () => {
-    return (
-        <View style = {{marginVertical: 10}}>
-        <SkeletonPlaceholder
-
-            backgroundColor='#c3c3c3'
-            highlightColor='lightgray'
-            direction='right'
-            speed={2000}>
-            <View style={styles.loadingNewsContainer}>
-                <SkeletonPlaceholder.Item  marginVertical = {10} {...styles.news} />
-                <View>
-                    <SkeletonPlaceholder.Item {...styles.text} />
-                    <SkeletonPlaceholder.Item {...styles.smallerText} />
-                </View>
-            </View>
-        </SkeletonPlaceholder>
-        </View>
-    )
-}
 
 const styles = StyleSheet.create({
     loadingNewsContainer: {
-        paddingHorizontal: 30,
+        paddingHorizontal: 20,
         flexDirection: 'row',
-        alignItems: 'center'
+        marginVertical: 10,
+        // alignItems: 'center',
     },
     news: {
-        width: 50,
-        height: 50,
-        borderRadius: 50,
-        marginRight: 10,
+        width: 40,
+        height: 40,
+        borderRadius: 8,
+        marginRight: 15,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    text: {
-        width: 260,
-        height: 15,
-        marginBottom: 7,
-        borderRadius: 20
+    posterText: {
+        color: 'white',
+        fontSize: 20,
+        textTransform: 'uppercase',
     },
-    smallerText: {
-        width: 260,
-        height: 9,
-        borderRadius: 20,
+    topText: {
+        fontSize: 16
+    },
+    storiesDetails: {
+        fontSize: 14,
+        color: 'gray',
+        marginRight: 5,
+        marginTop: 3
     }
 })
 export default NewsScreen

@@ -37,7 +37,7 @@ interface NewState {
 }
 
 const initialState : NewState = {
-    news: [1, 2, 3, 4,5, 7, 9, 0],
+    news: [],
     errorMessage: '',
     isFetching: false,
     isSuccess: false,
