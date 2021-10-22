@@ -12,6 +12,7 @@ target 'newsify_quickcheck' do
     :hermes_enabled => false
   )
 
+
   target 'newsify_quickcheckTests' do
     inherit! :complete
     # Pods for testing
