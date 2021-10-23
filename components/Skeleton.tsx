@@ -5,25 +5,11 @@ import {
     StyleSheet
 } from 'react-native';
 
-import Animated, {
-    useAnimatedStyle,
-    useAnimatedGestureHandler,
-    useSharedValue
-} from 'react-native-reanimated';
-
-import { PanGestureHandler, PanGestureHandlerGestureEvent } from 'react-native-gesture-handler'
-
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 const Skeleton: React.FC = () => {
 
-    const handleGestureEvent = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({
-        onStart: (event, context) =>{
-            
-        }
-    })
     return (
-        <PanGestureHandler onGestureEvent = {handleGestureEvent}>
             <View style={{ marginVertical: 4 }}>
                 <SkeletonPlaceholder
                     backgroundColor='#c3c3c3'
@@ -39,7 +25,6 @@ const Skeleton: React.FC = () => {
                     </View>
                 </SkeletonPlaceholder>
             </View>
-        </PanGestureHandler>
 
     )
 }

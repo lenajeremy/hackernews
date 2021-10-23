@@ -8,7 +8,8 @@ import { StoryType, RootState } from './types';
 interface StoryQueryType {
     storyType: StoryType,
     start: number,
-    end: number
+    end: number,
+    operation: 'append' | 'new'
 }
 
 export const getStories = createAsyncThunk(
@@ -19,12 +20,22 @@ export const getStories = createAsyncThunk(
 
             const response : AxiosResponse = await axios.get(url);
 
-            const stories : number[] | any = response.data;
+            let stories = response.data as number[];
 
+            if(payload.operation === 'append'){
+                const news : number[] = thunkAPI.getState().news.news;
+
+                stories = stories.slice(payload.start, payload.end);
+
+                Alert.alert(JSON.stringify(stories))
+
+                return stories.concat(news);
+            }
             return stories.slice(payload.start, payload.end)
         } catch (error) {
+            Alert.alert("network error");
             console.warn("Error", error.message);
-            thunkAPI.rejectWithValue('Unable to get stories, please check your connection.')
+            return thunkAPI.rejectWithValue('Unable to get stories, please check your connection.')
         }
     }
 );
@@ -34,13 +45,15 @@ interface NewState {
     errorMessage: string,
     isFetching: boolean,
     isSuccess: boolean,
+    isFetched: boolean
 }
 
 const initialState : NewState = {
-    news: [],
+    news: [1, 2,3, 4, 5, 6, 7],
     errorMessage: '',
     isFetching: false,
     isSuccess: false,
+    isFetched: false,
 }
 
 const newsSlice = createSlice({
@@ -51,30 +64,33 @@ const newsSlice = createSlice({
             state.errorMessage = '';
             state.isFetching = false;
             state.isSuccess = false;
+            state.isFetched = true;
 
             return state
         }
     },
-    extraReducers: {
-        [getStories.fulfilled.toString()] : (state, {payload}) => {
-            state.news = payload;
+    extraReducers: (builder) => {
+        builder.addCase(getStories.fulfilled, (state, {payload}) => {
+            state.news = payload as number[];
             state.isSuccess = true;
             state.isFetching = false;
+            state.isFetched = true;
             state.errorMessage = '';
 
             return state;
-        },
-        [getStories.pending.toString()] : (state) => {
-            state.isFetching = true;
-        },
-        [getStories.rejected.toString()] : (state, payload) => {
+        });
+        builder.addCase(getStories.pending, (state, {meta}) => {
+            if(meta.arg.operation === 'new'){
+                state.isFetching = true;
+            }
+        });
+        builder.addCase(getStories.rejected, (state, {payload}) => {
             state.isFetching = false;
             state.isSuccess = false;
-            state.errorMessage = payload;
+            state.errorMessage = payload as string;
 
             return state;
-
-        }
+        });
     }
 }
 )

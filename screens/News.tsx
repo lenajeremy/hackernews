@@ -7,6 +7,7 @@ import {
     ActivityIndicator,
     StyleSheet,
     useColorScheme,
+    Alert,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -27,19 +28,24 @@ function NewsScreen() {
 
     const STORIES_PER_PAGE = 10;
 
-
     const dispatch = useDispatch();
     const [refreshing, setRefreshing] = useState(false)
     const { news, errorMessage, isFetching, isSuccess } = useSelector(newsSelector);
 
-    useEffect(() => {
+    const loadNewStories = () => {
         dispatch(getStories(
             {
                 start: (pageNumber * STORIES_PER_PAGE),
                 end: (pageNumber + 1) * STORIES_PER_PAGE,
                 storyType: StoryType.new,
+                operation: 'new'
             }
         ));
+        setPageNumber(pageNumber => pageNumber + 1);
+    }
+
+    useEffect(() => {
+        loadNewStories()
     }, [])
 
     function _renderNews({ item: item }: { item: number }) {
@@ -51,29 +57,47 @@ function NewsScreen() {
 
     function refresh() {
         setRefreshing(true);
-        setTimeout(() => {
-            return new Promise(resolve => {
-                setRefreshing(false)
-            })
-        }, 2000)
+        dispatch(getStories(
+            {
+                start: (pageNumber * STORIES_PER_PAGE),
+                end: (pageNumber + 1) * STORIES_PER_PAGE,
+                storyType: StoryType.new,
+                operation: 'new'
+            }
+        ));
+        setRefreshing(false)
     }
 
     function loadMoreStories() {
-        // dispatch(getStories(
-        //     {
-        //         start: pageNumber + 1,
-        //         end: (pageNumber + 1) * STORIES_PER_PAGE,
-        //         storyType: StoryType.new,
-        //         operation: 'append'
-        //     }
-        // ))
+        if (news.length > 0) {
+            dispatch(getStories(
+                {
+                    start: pageNumber + 1,
+                    end: (pageNumber + 1) * STORIES_PER_PAGE,
+                    storyType: StoryType.new,
+                    operation: 'append'
+                }
+            ));
+        }
     }
 
-    if (!isSuccess) {
+    if (!isSuccess && errorMessage) {
         return (
-            <Text>{errorMessage}</Text>
+            <SafeAreaView style = {{flex: 1}}>
+                <Header title="HackerNews" />
+                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <Text style={{ width: '80%', fontSize: 18, textAlign: 'center', marginBottom: 10 }}>{errorMessage}</Text>
+                    <TouchableOpacity
+                        style={{ marginVertical: 10, padding: 12, borderRadius: 8, backgroundColor: '#423ef6' }}
+                        onPress={loadNewStories}
+                    >
+                        <Text style={{ color: 'white', fontSize: 16, textTransform: 'uppercase' }}>Reload</Text>
+                    </TouchableOpacity>
+                </View>
+            </SafeAreaView>
         )
     }
+
     if (isFetching) {
         return (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -83,7 +107,7 @@ function NewsScreen() {
     } else {
         return (
             <SafeAreaView style={{ backgroundColor: isDarkMode ? '#111' : 'white', flex: 1 }}>
-                <Header title='Hackernews' />
+                <Header title="HackerNews" />
                 <FlatList
                     contentContainerStyle={{
                         marginTop: 10
@@ -94,7 +118,7 @@ function NewsScreen() {
                     data={news}
                     renderItem={_renderNews}
                     onEndReached={loadMoreStories}
-                    onEndReachedThreshold={0.1}
+                    onEndReachedThreshold={0.05}
                     ListFooterComponent={<ActivityIndicator style={{ marginBottom: 30 }} />}
                 />
             </SafeAreaView>
@@ -196,7 +220,7 @@ const NewsType: React.FC<{ type: StoryType, item: number }> = ({ type, item }) =
 
     if (loaded) {
         return (
-            <TouchableOpacity style={{ marginVertical: 4 }} onPress={() => navigation.navigate(RouteNames.storyScreen as never, { story })}>
+            <TouchableOpacity style={{ marginVertical: 4 }} onPress={() => navigation.navigate(RouteNames.storyScreen, { story })}>
                 <View style={styles.loadingNewsContainer}>
                     <View style={[styles.news, { backgroundColor: COLORS[Math.floor(Math.random() * COLORS.length)] }]}>
                         <Text style={styles.posterText}>{story.poster.charAt(0).concat(story.poster.charAt(1))}</Text>
@@ -204,13 +228,13 @@ const NewsType: React.FC<{ type: StoryType, item: number }> = ({ type, item }) =
                     <View style={{ width: '80%', }}>
                         <Text style={[styles.topText, { color: isDarkMode ? 'white' : '#111' }]}>{story?.text}</Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <Text style={[styles.storiesDetails, {color: isDarkMode ? 'gray': '#333'}]}>
+                            <Text style={[styles.storiesDetails, { color: isDarkMode ? 'gray' : '#333' }]}>
                                 {story.poster}
                             </Text>
-                            <Text style={[styles.storiesDetails, {color: isDarkMode ? 'gray': '#333'}]}>
+                            <Text style={[styles.storiesDetails, { color: isDarkMode ? 'gray' : '#333' }]}>
                                 {getTime(story.timePosted)}
                             </Text>
-                            <Text style={[styles.storiesDetails, {color: isDarkMode ? 'gray': '#333'}]}>
+                            <Text style={[styles.storiesDetails, { color: isDarkMode ? 'gray' : '#333' }]}>
                                 {story.likes} likes
                             </Text>
                         </View>
