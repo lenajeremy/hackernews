@@ -26,26 +26,27 @@ function NewsScreen() {
     const [pageNumber, setPageNumber] = useState(0);
     const isDarkMode = useColorScheme() === 'dark';
 
-    const STORIES_PER_PAGE = 10;
+    const STORIES_PER_PAGE = 15;
 
     const dispatch = useDispatch();
     const [refreshing, setRefreshing] = useState(false)
     const { news, errorMessage, isFetching, isSuccess } = useSelector(newsSelector);
 
-    const loadNewStories = () => {
+    const loadStories = (operation : 'new' | 'append') => {
         dispatch(getStories(
             {
-                start: (pageNumber * STORIES_PER_PAGE),
-                end: (pageNumber + 1) * STORIES_PER_PAGE,
-                storyType: StoryType.new,
-                operation: 'new'
+                storyType: StoryType.new, 
+                operation,
+                lastStoryId: news[(news.length - 1) as number],
+                storyCount: STORIES_PER_PAGE,
             }
         ));
-        setPageNumber(pageNumber => pageNumber + 1);
+
+        setPageNumber(pageNumber + 1);
     }
 
     useEffect(() => {
-        loadNewStories()
+        loadStories('new')
     }, [])
 
     function _renderNews({ item: item }: { item: number }) {
@@ -59,26 +60,13 @@ function NewsScreen() {
         setRefreshing(true);
         dispatch(getStories(
             {
-                start: (pageNumber * STORIES_PER_PAGE),
-                end: (pageNumber + 1) * STORIES_PER_PAGE,
+                start: 0,
+                end: STORIES_PER_PAGE,
                 storyType: StoryType.new,
                 operation: 'new'
             }
         ));
         setRefreshing(false)
-    }
-
-    function loadMoreStories() {
-        if (news.length > 0) {
-            dispatch(getStories(
-                {
-                    start: pageNumber + 1,
-                    end: (pageNumber + 1) * STORIES_PER_PAGE,
-                    storyType: StoryType.new,
-                    operation: 'append'
-                }
-            ));
-        }
     }
 
     if (!isSuccess && errorMessage) {
@@ -89,7 +77,7 @@ function NewsScreen() {
                     <Text style={{ color: !isDarkMode ? '#111' : 'white', width: '80%', fontSize: 20, lineHeight: 28, textAlign: 'center', marginBottom: 10 }}>{errorMessage}</Text>
                     <TouchableOpacity
                         style={{ marginVertical: 10, padding: 12, width: 100, borderRadius: 8, backgroundColor: '#423ef6' }}
-                        onPress={loadNewStories}
+                        onPress={() => loadStories('append')}
                     >
                         <Text style={{ color: 'white', textAlign: 'center',fontSize: 16, textTransform: 'uppercase' }}>Reload</Text>
                     </TouchableOpacity>
@@ -117,7 +105,7 @@ function NewsScreen() {
                     refreshing={refreshing}
                     data={news}
                     renderItem={_renderNews}
-                    onEndReached={loadMoreStories}
+                    onEndReached={() => loadStories('append')}
                     onEndReachedThreshold={0.05}
                     ListFooterComponent={<ActivityIndicator style={{ marginBottom: 30 }} />}
                 />

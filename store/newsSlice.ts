@@ -7,31 +7,35 @@ import { StoryType, RootState } from './types';
 
 interface StoryQueryType {
     storyType: StoryType,
-    start: number,
-    end: number,
+    lastStoryId: number,
+    storyCount: number,
     operation: 'append' | 'new'
 }
 
 export const getStories = createAsyncThunk(
     'news/getStories',
     async (payload : StoryQueryType, thunkAPI ) => {
+
+        Alert.alert(JSON.stringify(payload))
         try {
             const url = payload.storyType === StoryType.new ? '/newstories.json' : '/topstories.json';
 
             const response : AxiosResponse = await axios.get(url);
 
             let stories = response.data as number[];
+            
 
             if(payload.operation === 'append'){
-                const news : number[] = thunkAPI.getState().news.news;
 
-                stories = stories.slice(payload.start, payload.end);
+                const lastStoryIndex = stories.indexOf(payload.lastStoryId);
 
-                Alert.alert(JSON.stringify(stories))
+                stories = stories.slice(lastStoryIndex, lastStoryIndex + payload.storyCount);
 
-                return stories.concat(news);
+                return stories;
             }
-            return stories.slice(payload.start, payload.end)
+
+            Alert.alert(stories.slice(0, payload.storyCount).length.toString())
+            return stories.slice(0, payload.storyCount)
         } catch (error) {
             return thunkAPI.rejectWithValue('Unable to get stories, please check your connection.')
         }
@@ -68,8 +72,13 @@ const newsSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(getStories.fulfilled, (state, {payload}) => {
-            state.news = payload as number[];
+        builder.addCase(getStories.fulfilled, (state, {payload, meta}) => {
+
+            if(meta.arg.operation === 'append'){
+                state.news.push(...payload as number[]);
+            }else{
+                state.news = payload as number[];
+            }
             state.isSuccess = true;
             state.isFetching = false;
             state.isFetched = true;
