@@ -16,7 +16,6 @@ export const getStories = createAsyncThunk(
     'news/getStories',
     async (payload : StoryQueryType, thunkAPI ) => {
 
-        Alert.alert(JSON.stringify(payload))
         try {
             const url = payload.storyType === StoryType.new ? '/newstories.json' : '/topstories.json';
 
@@ -34,7 +33,6 @@ export const getStories = createAsyncThunk(
                 return stories;
             }
 
-            Alert.alert(stories.slice(0, payload.storyCount).length.toString())
             return stories.slice(0, payload.storyCount)
         } catch (error) {
             return thunkAPI.rejectWithValue('Unable to get stories, please check your connection.')

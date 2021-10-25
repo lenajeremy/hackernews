@@ -12,6 +12,8 @@ target 'newsify_quickcheck' do
     :hermes_enabled => false
   )
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
 
   target 'newsify_quickcheckTests' do
     inherit! :complete

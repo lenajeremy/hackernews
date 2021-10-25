@@ -381,7 +381,7 @@ PODS:
   - RNScreens (3.8.0):
     - React-Core
     - React-RCTImage
-  - RNVectorIcons (8.1.0):
+  - RNVectorIcons (9.0.0):
     - React-Core
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -599,10 +599,10 @@ SPEC CHECKSUMS:
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNReanimated: b04ef2a4f0cb61b062bbcf033f84a9e470f4f60b
   RNScreens: 6e1ea5787989f92b0671049b808aef64fa1ef98c
-  RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
+  RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
   Yoga: 2b4a01651f42a32f82e6cef3830a3ba48088237f
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: f7e772eb1e1f1cc60e8310bcb557ec23b5926578
+PODFILE CHECKSUM: b93af4591b754c6d969893f153c42e3d6f4b3906
 
 COCOAPODS: 1.10.1

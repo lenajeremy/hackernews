@@ -8,6 +8,7 @@ import {
     StyleSheet,
     useColorScheme,
     Alert,
+    StatusBar,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -20,6 +21,16 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/core';
 import { RouteNames } from '../constants';
 
+
+export interface StoryItem {
+    id: number,
+    text: string,
+    url: string,
+    poster: string,
+    timePosted: number,
+    comments: number[] | undefined,
+    likes: number,
+}
 
 function NewsScreen() {
 
@@ -35,7 +46,7 @@ function NewsScreen() {
     const loadStories = (operation : 'new' | 'append') => {
         dispatch(getStories(
             {
-                storyType: StoryType.new, 
+                storyType: StoryType.top, 
                 operation,
                 lastStoryId: news[(news.length - 1) as number],
                 storyCount: STORIES_PER_PAGE,
@@ -60,10 +71,10 @@ function NewsScreen() {
         setRefreshing(true);
         dispatch(getStories(
             {
-                start: 0,
-                end: STORIES_PER_PAGE,
-                storyType: StoryType.new,
-                operation: 'new'
+                storyType: StoryType.top,
+                operation: 'new',
+                lastStoryId: news[(news.length - 1) as number],
+                storyCount: STORIES_PER_PAGE
             }
         ));
         setRefreshing(false)
@@ -88,14 +99,15 @@ function NewsScreen() {
 
     if (isFetching) {
         return (
-            <View style={{ backgroundColor: isDarkMode ? '#111' : 'white', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ backgroundColor: isDarkMode ? '#000' : 'white', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                 <ActivityIndicator />
             </View>
         )
     } else {
         return (
-            <SafeAreaView style={{ backgroundColor: isDarkMode ? '#111' : 'white', flex: 1 }}>
-                <Header title="HackerNews" type = 'main'/>
+            <SafeAreaView style={{ backgroundColor: isDarkMode ? '#000' : 'white', flex: 1 }}>
+                <StatusBar barStyle = {isDarkMode ? 'light-content' : 'dark-content'} backgroundColor = {isDarkMode ? '#000' : 'white'}/>
+                <Header title="HackerNews" />
                 <FlatList
                     contentContainerStyle={{
                         marginTop: 10
@@ -128,16 +140,6 @@ const NewsType: React.FC<{ type: StoryType, item: number }> = ({ type, item }) =
     const isDarkMode = useColorScheme() === 'dark';
     const navigation = useNavigation()
 
-    interface StoryItem {
-        id: number,
-        text: string,
-        url: string,
-        poster: string,
-        timePosted: number,
-        comments: number[],
-        likes: number,
-    }
-
     const [loaded, setLoaded] = useState(false);
     const [story, setStory] = useState<StoryItem>({
         text: '',
@@ -152,7 +154,6 @@ const NewsType: React.FC<{ type: StoryType, item: number }> = ({ type, item }) =
     useEffect(() => {
         const getStory = async ({ id }: { id: number }) => {
 
-            console.log('getting', id)
             try {
                 const response: AxiosResponse = await axios.get('/item/' + id + '.json')
 
