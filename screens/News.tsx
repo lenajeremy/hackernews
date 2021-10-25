@@ -83,15 +83,15 @@ function NewsScreen() {
 
     if (!isSuccess && errorMessage) {
         return (
-            <SafeAreaView style = {{flex: 1}}>
+            <SafeAreaView style = {{flex: 1, backgroundColor: isDarkMode ? '#111' : 'white'}}>
                 <Header title="HackerNews" />
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <Text style={{ width: '80%', fontSize: 18, textAlign: 'center', marginBottom: 10 }}>{errorMessage}</Text>
+                    <Text style={{ color: !isDarkMode ? '#111' : 'white', width: '80%', fontSize: 20, lineHeight: 28, textAlign: 'center', marginBottom: 10 }}>{errorMessage}</Text>
                     <TouchableOpacity
-                        style={{ marginVertical: 10, padding: 12, borderRadius: 8, backgroundColor: '#423ef6' }}
+                        style={{ marginVertical: 10, padding: 12, width: 100, borderRadius: 8, backgroundColor: '#423ef6' }}
                         onPress={loadNewStories}
                     >
-                        <Text style={{ color: 'white', fontSize: 16, textTransform: 'uppercase' }}>Reload</Text>
+                        <Text style={{ color: 'white', textAlign: 'center',fontSize: 16, textTransform: 'uppercase' }}>Reload</Text>
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>
@@ -100,14 +100,14 @@ function NewsScreen() {
 
     if (isFetching) {
         return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ backgroundColor: isDarkMode ? '#111' : 'white', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                 <ActivityIndicator />
             </View>
         )
     } else {
         return (
             <SafeAreaView style={{ backgroundColor: isDarkMode ? '#111' : 'white', flex: 1 }}>
-                <Header title="HackerNews" />
+                <Header title="HackerNews" type = 'main'/>
                 <FlatList
                     contentContainerStyle={{
                         marginTop: 10

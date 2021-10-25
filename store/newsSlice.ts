@@ -33,8 +33,6 @@ export const getStories = createAsyncThunk(
             }
             return stories.slice(payload.start, payload.end)
         } catch (error) {
-            Alert.alert("network error");
-            console.warn("Error", error.message);
             return thunkAPI.rejectWithValue('Unable to get stories, please check your connection.')
         }
     }
@@ -49,7 +47,7 @@ interface NewState {
 }
 
 const initialState : NewState = {
-    news: [1, 2,3, 4, 5, 6, 7],
+    news: [],
     errorMessage: '',
     isFetching: false,
     isSuccess: false,

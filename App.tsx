@@ -21,7 +21,7 @@ const Component: React.FC = () => {
       <Stack.Navigator
         initialRouteName={RouteNames.newsScreen}
         screenOptions={{
-          headerShown : false
+          headerShown : false,
         }}
       >
         <Stack.Screen

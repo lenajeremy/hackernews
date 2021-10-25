@@ -7,8 +7,14 @@ import {
     useColorScheme
 } from 'react-native';
 
+interface HeaderProps{
+    title: string,
+    leftIcon?: React.ReactElement,
+    type: 'main' | 'story'
+}
 
-const Header : React.FC<{title: string}> = ({title}) => {
+
+const Header : React.FC<HeaderProps> = ({title}) => {
 
     const isDarkMode = useColorScheme() === 'dark';
 
