@@ -9,6 +9,7 @@ import {
     useColorScheme,
     Alert,
     StatusBar,
+    Image,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -85,10 +86,11 @@ function NewsScreen() {
             <SafeAreaView style = {{flex: 1, backgroundColor: isDarkMode ? '#111' : 'white'}}>
                 <Header title="HackerNews" />
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <Image source = {require('../nointernet.png')} resizeMode ='contain' style = {{width: 200, height: 200}}/>
                     <Text style={{ color: !isDarkMode ? '#111' : 'white', width: '80%', fontSize: 20, lineHeight: 28, textAlign: 'center', marginBottom: 10 }}>{errorMessage}</Text>
                     <TouchableOpacity
                         style={{ marginVertical: 10, padding: 12, width: 100, borderRadius: 8, backgroundColor: '#423ef6' }}
-                        onPress={() => loadStories('append')}
+                        onPress={() => loadStories('new')}
                     >
                         <Text style={{ color: 'white', textAlign: 'center',fontSize: 16, textTransform: 'uppercase' }}>Reload</Text>
                     </TouchableOpacity>
@@ -159,8 +161,6 @@ const NewsType: React.FC<{ type: StoryType, item: number }> = ({ type, item }) =
 
                 const story: any = response.data;
 
-                console.log(story)
-
                 setStory({
                     id: item,
                     text: story.title,
@@ -175,7 +175,7 @@ const NewsType: React.FC<{ type: StoryType, item: number }> = ({ type, item }) =
 
 
             } catch (error) {
-                console.log(error)
+                console.error(error)
                 setLoaded(false)
             }
         }
@@ -189,15 +189,12 @@ const NewsType: React.FC<{ type: StoryType, item: number }> = ({ type, item }) =
 
         const timeDifference = nowDate.getTime() - createdDate.getTime()
 
-        const SECONDS = Math.round(timeDifference / 1000);
         const MINUTES = Math.round(timeDifference / (1000 * 60));
         const HOURS = Math.round(timeDifference / (1000 * 60 * 60));
         const DAYS = Math.round(timeDifference / (1000 * 60 * 60 * 24));
         const WEEKS = Math.round(timeDifference / (1000 * 60 * 60 * 24 * 7));
         const MONTHS = Math.round(timeDifference / (1000 * 60 * 60 * 24 * 7 * 4));
         const YEARS = Math.round(timeDifference / (1000 * 60 * 60 * 24 * 7 * 4 * 12));
-
-        console.log(timeDifference)
 
         if (YEARS > 0) return YEARS + `yr${YEARS > 1 ? 's' : ''} ago`
         else if (MONTHS > 0) return MONTHS + `mth${MONTHS > 1 ? 's' : ''} ago`

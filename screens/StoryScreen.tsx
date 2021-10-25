@@ -72,9 +72,12 @@ const styles = StyleSheet.create({
         alignSelf: 'stretch',
     },
     storyDetailsContainer: {
-        padding: 20
+        padding: 20,
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
     },
     storyTitle: {
+        backgroundColor: 'transparent',
         fontSize: 22,
         lineHeight: 28,
         fontWeight: '600',
