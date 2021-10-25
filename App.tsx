@@ -6,18 +6,43 @@ import { RouteNames } from './constants';
 import { Provider } from 'react-redux';
 import SqliteProvider from './sqlite3/SqliteProvider';
 import SplashScreen from 'react-native-splash-screen';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 /* SCREENS */
 import { AboutMe, News, StoryWebView, AuthScreen } from './screens';
 import store from './store';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+
+function BottomTabs() {
+  const Tabs = createBottomTabNavigator()
+  return (
+    <Tabs.Navigator>
+      <Tabs.Screen
+        name='homeTab'
+        component={News}
+        options={{
+          tabBarIcon: ({ focused }) => <Ionicons name='menu' color={focused ? 'orange' : 'gray'} />
+        }}
+      />
+      <Tabs.Screen
+        name='aboutTab'
+        component={AboutMe}
+        options={{
+          tabBarIcon: ({ focused }) => <Ionicons name='person' color={focused ? 'orange' : 'gray'} />
+        }}
+      />
+    </Tabs.Navigator>
+  )
+}
 
 
 const Component: React.FC = () => {
 
   useEffect(() => {
     SplashScreen.hide();
-  },[])
+  }, [])
 
   const Stack = createStackNavigator()
 
@@ -40,14 +65,15 @@ const Component: React.FC = () => {
               name={RouteNames.aboutScreen}
               component={AboutMe}
             />
+<BottomTabs />
 
             <Stack.Screen
               name={RouteNames.storyScreen}
               component={StoryWebView}
             />
             <Stack.Screen
-              name = {RouteNames.authScreen}
-              component = {AuthScreen}
+              name={RouteNames.authScreen}
+              component={AuthScreen}
             />
           </Stack.Navigator>
         </NavigationContainer>
@@ -55,5 +81,6 @@ const Component: React.FC = () => {
     </SqliteProvider>
   )
 }
+
 
 export default Component

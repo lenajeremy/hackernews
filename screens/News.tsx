@@ -86,7 +86,7 @@ function NewsScreen() {
             <SafeAreaView style = {{flex: 1, backgroundColor: isDarkMode ? '#111' : 'white'}}>
                 <Header title="HackerNews" />
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <Image source = {require('../nointernet.png')} resizeMode ='contain' style = {{width: 200, height: 200}}/>
+                    <Image source = {require('../nointernet.png')} resizeMode ='contain' style = {{width: 150, height: 150}}/>
                     <Text style={{ color: !isDarkMode ? '#111' : 'white', width: '80%', fontSize: 20, lineHeight: 28, textAlign: 'center', marginBottom: 10 }}>{errorMessage}</Text>
                     <TouchableOpacity
                         style={{ marginVertical: 10, padding: 12, width: 100, borderRadius: 8, backgroundColor: '#423ef6' }}
