@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, useColorScheme } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack';
 import { RouteNames } from './constants';
@@ -16,21 +16,31 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 
 function BottomTabs() {
+
+  const isDarkMode = useColorScheme() === 'dark'
   const Tabs = createBottomTabNavigator()
   return (
-    <Tabs.Navigator>
+    <Tabs.Navigator
+      screenOptions = {{
+        headerShown: false,
+          tabBarShowLabel: false,
+          tabBarStyle: {
+            backgroundColor: isDarkMode ? 'black' : 'white'
+          },
+      }}
+    >
       <Tabs.Screen
         name='homeTab'
         component={News}
         options={{
-          tabBarIcon: ({ focused }) => <Ionicons name='menu' color={focused ? 'orange' : 'gray'} />
+          tabBarIcon: ({ focused }) => <Ionicons name='logo-windows' color={focused ? 'orange' : 'gray'} size = {24} />
         }}
       />
       <Tabs.Screen
         name='aboutTab'
         component={AboutMe}
         options={{
-          tabBarIcon: ({ focused }) => <Ionicons name='person' color={focused ? 'orange' : 'gray'} />
+          tabBarIcon: ({ focused }) => <Ionicons name='person' color={focused ? 'orange' : 'gray'} size = {24} />
         }}
       />
     </Tabs.Navigator>
@@ -58,14 +68,13 @@ const Component: React.FC = () => {
           >
             <Stack.Screen
               name={RouteNames.newsScreen}
-              component={News}
+              component={BottomTabs}
             />
 
             <Stack.Screen
               name={RouteNames.aboutScreen}
               component={AboutMe}
             />
-<BottomTabs />
 
             <Stack.Screen
               name={RouteNames.storyScreen}

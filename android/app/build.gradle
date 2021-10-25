@@ -152,6 +152,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file('newsify.keystore')
+            storePassword 'newsify'
+            keyAlias 'newsifyalias'
+            keyPassword 'newsify'
+        }
     }
     buildTypes {
         debug {
