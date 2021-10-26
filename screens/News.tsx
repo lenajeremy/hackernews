@@ -83,13 +83,14 @@ function NewsScreen() {
 
     if (!isSuccess && errorMessage) {
         return (
-            <SafeAreaView style = {{flex: 1, backgroundColor: isDarkMode ? '#111' : 'white'}}>
+            <SafeAreaView style = {{flex: 1, backgroundColor: isDarkMode ? '#000' : 'white'}}>
+                <StatusBar barStyle = {isDarkMode ? 'light-content' : 'dark-content'} backgroundColor = {isDarkMode ? '#000' : 'white'}/>
                 <Header title="HackerNews" />
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <Image source = {require('../nointernet.png')} resizeMode ='contain' style = {{width: 150, height: 150}}/>
                     <Text style={{ color: !isDarkMode ? '#111' : 'white', width: '80%', fontSize: 20, lineHeight: 28, textAlign: 'center', marginBottom: 10 }}>{errorMessage}</Text>
                     <TouchableOpacity
-                        style={{ marginVertical: 10, padding: 12, width: 100, borderRadius: 8, backgroundColor: '#423ef6' }}
+                        style={{ marginVertical: 10, padding: 12, width: 100, borderRadius: 8, backgroundColor: '#ec6333' }}
                         onPress={() => loadStories('new')}
                     >
                         <Text style={{ color: 'white', textAlign: 'center',fontSize: 16, textTransform: 'uppercase' }}>Reload</Text>
@@ -102,7 +103,7 @@ function NewsScreen() {
     if (isFetching) {
         return (
             <View style={{ backgroundColor: isDarkMode ? '#000' : 'white', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <ActivityIndicator />
+                <ActivityIndicator color = "#ec6333" />
             </View>
         )
     } else {
@@ -121,7 +122,7 @@ function NewsScreen() {
                     renderItem={_renderNews}
                     onEndReached={() => loadStories('append')}
                     onEndReachedThreshold={0.05}
-                    ListFooterComponent={<ActivityIndicator style={{ marginBottom: 30 }} />}
+                    ListFooterComponent={<ActivityIndicator style={{ marginBottom: 30 }} color = "#ec6333" />}
                 />
             </SafeAreaView>
         )
@@ -129,7 +130,7 @@ function NewsScreen() {
 }
 
 const COLORS = [
-    'orange',
+    '#ec6333',
     'hotpink',
     'lightgreen',
     'blue',

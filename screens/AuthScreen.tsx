@@ -58,7 +58,7 @@ const AuthScreen: React.FC = () => {
                             </Text>
                             <Text> </Text>
                             <TouchableOpacity onPress={() => setAuthType('signin')}>
-                            <Text style = {{fontSize: 16, color: 'orange'}}>Sign In</Text>
+                            <Text style = {{fontSize: 16, color: '#ec6333'}}>Sign In</Text>
                             </TouchableOpacity>
                         </View>
                         :
@@ -68,7 +68,7 @@ const AuthScreen: React.FC = () => {
                             </Text>
                             <Text> </Text>
                             <TouchableOpacity onPress = {() => setAuthType('signup')}>
-                            <Text style = {{fontSize: 16, color: 'orange'}}>Sign Up</Text>
+                            <Text style = {{fontSize: 16, color: '#ec6333'}}>Sign Up</Text>
                             </TouchableOpacity>
                         </View>
                 }
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     },
     button: {
         marginVertical: 15,
-        backgroundColor: 'orange',
+        backgroundColor: '#ec6333',
         padding: 10,
         borderRadius: 10,
         width: 330,

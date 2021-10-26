@@ -33,14 +33,14 @@ function BottomTabs() {
         name='homeTab'
         component={News}
         options={{
-          tabBarIcon: ({ focused }) => <Ionicons name='logo-windows' color={focused ? 'orange' : 'gray'} size = {24} />
+          tabBarIcon: ({ focused }) => <Ionicons name='logo-windows' color={focused ? '#ec6333' : 'gray'} size = {24} />
         }}
       />
       <Tabs.Screen
         name='aboutTab'
         component={AboutMe}
         options={{
-          tabBarIcon: ({ focused }) => <Ionicons name='person' color={focused ? 'orange' : 'gray'} size = {24} />
+          tabBarIcon: ({ focused }) => <Ionicons name='person' color={focused ? '#ec6333' : 'gray'} size = {24} />
         }}
       />
     </Tabs.Navigator>

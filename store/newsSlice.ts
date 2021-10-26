@@ -28,7 +28,7 @@ export const getStories = createAsyncThunk(
 
                 const lastStoryIndex = stories.indexOf(payload.lastStoryId);
 
-                stories = stories.slice(lastStoryIndex, lastStoryIndex + payload.storyCount);
+                stories = stories.slice(lastStoryIndex + 1, lastStoryIndex + payload.storyCount);
 
                 return stories;
             }
