@@ -40,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({ title, back }) => {
 
 const styles = StyleSheet.create({
     header: {
-        paddingHorizontal: 10,
+        paddingHorizontal: 20,
         paddingVertical: 10,
         flexDirection: 'row',
         alignItems: 'center'

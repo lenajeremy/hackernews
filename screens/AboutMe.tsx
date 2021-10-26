@@ -66,12 +66,12 @@ function AboutMe() {
     }
 
     return (
-        <View style={{ backgroundColor: isDarkMode ? 'lightgreen' : 'white', flex: 1 }}>
+        <View style={{ backgroundColor: 'lightgreen', flex: 1 }}>
             <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
             <View style={styles.animatedDotsContainer}>
                 {Array(slides.length).fill(null).map((_, index) => <AnimatedStatusDots key={index} index={index} />)}
             </View>
-            <View style={[{ backgroundColor: isDarkMode ? 'lightgreen' : 'white' }, styles.mainContainer]}>
+            <View style={[{ backgroundColor:'lightgreen'}, styles.mainContainer]}>
                 <Pressable onPress={handleStatusChange} style={{ width, height, justifyContent: 'center', alignItems: 'center' }}>
                     {slides[currentDotIndex]}
                 </Pressable>
