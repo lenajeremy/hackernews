@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
-import { View, Text, useColorScheme } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, useColorScheme, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack';
 import { RouteNames } from './constants';
 import { Provider } from 'react-redux';
-import SqliteProvider from './sqlite3/SqliteProvider';
 import SplashScreen from 'react-native-splash-screen';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -13,6 +12,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { AboutMe, News, StoryWebView, AuthScreen } from './screens';
 import store from './store';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createTable, deleteTable, getCurrentUser, getDBConnection, TABLE_NAMES } from './sqlite3/index.database';
+import { SQLiteDatabase } from 'react-native-sqlite-storage';
 
 
 function BottomTabs() {
@@ -21,26 +22,26 @@ function BottomTabs() {
   const Tabs = createBottomTabNavigator()
   return (
     <Tabs.Navigator
-      screenOptions = {{
+      screenOptions={{
         headerShown: false,
-          tabBarShowLabel: false,
-          tabBarStyle: {
-            backgroundColor: isDarkMode ? 'black' : 'white'
-          },
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          backgroundColor: isDarkMode ? 'black' : 'white'
+        },
       }}
     >
       <Tabs.Screen
         name='homeTab'
         component={News}
         options={{
-          tabBarIcon: ({ focused }) => <FontAwesome name='hacker-news' color={focused ? '#ec6333' : 'gray'} size = {30} />
+          tabBarIcon: ({ focused }) => <FontAwesome name='hacker-news' color={focused ? '#ec6333' : 'gray'} size={30} />
         }}
       />
       <Tabs.Screen
         name='aboutTab'
         component={AboutMe}
         options={{
-          tabBarIcon: ({ focused }) => <FontAwesome name='user' color={focused ? '#ec6333' : 'gray'} size = {28} />
+          tabBarIcon: ({ focused }) => <FontAwesome name='user' color={focused ? '#ec6333' : 'gray'} size={28} />
         }}
       />
     </Tabs.Navigator>
@@ -50,6 +51,8 @@ function BottomTabs() {
 
 const Component: React.FC = () => {
 
+  const [db, setDb] = useState<SQLiteDatabase>();
+
   useEffect(() => {
     SplashScreen.hide();
   }, [])
@@ -57,37 +60,35 @@ const Component: React.FC = () => {
   const Stack = createStackNavigator()
 
   return (
-    <SqliteProvider>
-      <Provider store={store}>
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName={RouteNames.authScreen}
-            screenOptions={{
-              headerShown: false,
-            }}
-          >
-            <Stack.Screen
-              name={RouteNames.newsScreen}
-              component={BottomTabs}
-            />
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName={RouteNames.authScreen}
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen
+            name={RouteNames.newsScreen}
+            component={BottomTabs}
+          />
 
-            <Stack.Screen
-              name={RouteNames.aboutScreen}
-              component={AboutMe}
-            />
+          <Stack.Screen
+            name={RouteNames.aboutScreen}
+            component={AboutMe}
+          />
 
-            <Stack.Screen
-              name={RouteNames.storyScreen}
-              component={StoryWebView}
-            />
-            <Stack.Screen
-              name={RouteNames.authScreen}
-              component={AuthScreen}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </Provider>
-    </SqliteProvider>
+          <Stack.Screen
+            name={RouteNames.storyScreen}
+            component={StoryWebView}
+          />
+          <Stack.Screen
+            name={RouteNames.authScreen}
+            component = {AuthScreen}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   )
 }
 

@@ -22,7 +22,11 @@ export const createTable = async (db: SQLiteDatabase, tableName: string, query: 
     const QUERY = `CREATE TABLE IF NOT EXISTS ${tableName}(${query});`;
 
     const table = await db.executeSql(QUERY);
+}
 
+export const getCurrentUser = async (db: SQLiteDatabase) => {
+    const stuff = await db.executeSql(`SELECT * from ${TABLE_NAMES.user}`)
+    return stuff[0].rows.item(0);
 }
 
 export const getUser = async (db: SQLiteDatabase, username: string) => {
@@ -35,11 +39,12 @@ export const getUser = async (db: SQLiteDatabase, username: string) => {
 }
 
 export const createUser = async (db: SQLiteDatabase, username : string, password: string, bookmarks: string) => {
-    const QUERY = `INSERT INTO ${TABLE_NAMES.user}(username, password, bookmarks) VALUES ('${username}', '${password}', '${bookmarks}');`;
+    const QUERY = `INSERT OR REPLACE INTO ${TABLE_NAMES.user}(username, password, bookmarks) VALUES ('${username}', '${password}', '${bookmarks}');`;
 
     console.log(QUERY)
     try{
         const user = await db.executeSql(QUERY);
+        console.log('user created');
         console.log(user[0].rows.length);
     }catch(error){
         console.error(error)
