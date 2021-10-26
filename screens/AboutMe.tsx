@@ -40,10 +40,10 @@ function AboutMe() {
         if (currentDotIndex === index) {
             dotWidth.value = withTiming(
                 100,
-                { duration: 10000 },
+                { duration: 6000 },
                 (completed) => {
                     if (completed) {
-                        runOnJS(setCurrentDotIndex)(currentDotIndex === index - 1 ? currentDotIndex : currentDotIndex+ 1)
+                        runOnJS(setCurrentDotIndex)(currentDotIndex === index - 1 ? 0 : currentDotIndex+ 1)
                     }
                 }
             );
@@ -59,7 +59,7 @@ function AboutMe() {
     const handleStatusChange = (e) => {
         const horizontalPosition = Math.floor(e.nativeEvent.pageX);
         if (horizontalPosition > width / 2) {
-            setCurrentDotIndex(currentDotIndex === slides.length - 1 ? slides.length : currentDotIndex + 1);
+            setCurrentDotIndex(currentDotIndex === slides.length - 1 ? 0 : currentDotIndex + 1);
         } else {
             setCurrentDotIndex(currentDotIndex === 0 ? currentDotIndex : currentDotIndex - 1)
         }
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     },
     animatedDot: {
         flex: 1,
-        backgroundColor: 'gray',
+        backgroundColor: 'lightgray',
         marginHorizontal: 4,
         borderRadius: 20,
     },
@@ -169,8 +169,8 @@ const styles = StyleSheet.create({
         top: 140,
         right: -20,
         transform: [
-            {scale: 0.7},
-            {rotate: '30deg'}
+            {scale: 0.6},
+            {rotate: '20deg'}
         ]
     }
 })
