@@ -32,13 +32,13 @@
 <img src="screenshots/status screen ios2.png" width="400">
 
 ### About Screen 3
-<img src="screenshots/status screen ios3.png" width="400">
+<img src="screenshots/status screen ios 3.png" width="400">
 
 ### Error Screen IOS (Dark Mode)
 <img src="screenshots/error screen ios.png" width="400">
 
 ### Error Screen Android (Light Mode)
-<img src="screenshots/error screen android.png" width="400">
+<img src="screenshots/errorscreen android.png" width="400">
 
 
 
