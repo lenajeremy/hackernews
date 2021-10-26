@@ -85,17 +85,17 @@ function NewsScreen() {
 
     if (!isSuccess && errorMessage) {
         return (
-            <SafeAreaView style = {{flex: 1, backgroundColor: isDarkMode ? '#111' : '#eee'}}>
-                <StatusBar barStyle = {isDarkMode ? 'light-content' : 'dark-content'} backgroundColor = {isDarkMode ? '#111' : '#eee'}/>
+            <SafeAreaView style = {{flex: 1, backgroundColor: isDarkMode ? 'black' : 'white'}}>
+                <StatusBar barStyle = {isDarkMode ? 'light-content' : 'dark-content'} backgroundColor = {isDarkMode ? 'black' : 'white'}/>
                 <Header title="HackerNews" />
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                     <Image source = {require('../nointernet.png')} resizeMode ='contain' style = {{width: 150, height: 150}}/>
-                    <Text style={{ color: !isDarkMode ? '#111' : '#eee', width: '80%', fontSize: 20, lineHeight: 28, textAlign: 'center', marginBottom: 10 }}>{errorMessage}</Text>
+                    <Text style={{ color: !isDarkMode ? 'black' : 'white', width: '80%', fontSize: 20, lineHeight: 28, textAlign: 'center', marginBottom: 10 }}>{errorMessage}</Text>
                     <TouchableOpacity
                         style={{ marginVertical: 10, padding: 12, width: 100, borderRadius: 8, backgroundColor: '#ec6333' }}
                         onPress={() => loadStories('new')}
                     >
-                        <Text style={{ color: '#eee', textAlign: 'center',fontSize: 16, textTransform: 'uppercase' }}>Reload</Text>
+                        <Text style={{ color: 'white', textAlign: 'center',fontSize: 16, textTransform: 'uppercase' }}>Reload</Text>
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>
@@ -104,17 +104,17 @@ function NewsScreen() {
 
     if (isFetching) {
         return (
-            <View style={{ backgroundColor: isDarkMode ? '#111' : '#eee', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ backgroundColor: isDarkMode ? 'black' : 'white', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                 <ActivityIndicator color = "#ec6333" />
             </View>
         )
     } else {
         return (
-            <SafeAreaView style={{ backgroundColor: isDarkMode ? '#111' : '#eee', flex: 1 }}>
-                <StatusBar barStyle = {isDarkMode ? 'light-content' : 'dark-content'} backgroundColor = {isDarkMode ? '#111' : '#eee'}/>
+            <SafeAreaView style={{ backgroundColor: isDarkMode ? 'black' : 'white', flex: 1 }}>
+                <StatusBar barStyle = {isDarkMode ? 'light-content' : 'dark-content'} backgroundColor = {isDarkMode ? 'black' : 'white'}/>
                 <Header title="HackerNews" rightIcon = {
                     <Pressable onPress = {() => setNewsType(newsType => newsType === StoryType.new ? StoryType.top : StoryType.new)}>
-                        <Ionicon size = {26} color = {isDarkMode ? '#eee' : '#111'} name = {newsType === StoryType.new ? 'ios-logo-designernews' : 'trending-up-sharp'} />
+                        <Ionicon size = {26} color = {isDarkMode ? 'white' : 'black'} name = {newsType === StoryType.new ? 'ios-logo-designernews' : 'trending-up-sharp'} />
                     </Pressable>
                 }/>
                 <FlatList
@@ -219,15 +219,15 @@ const NewsType: React.FC<{ type: StoryType, item: number }> = ({ type, item }) =
                         <Text style={styles.posterText}>{story.poster.charAt(0).concat(story.poster.charAt(1))}</Text>
                     </View>
                     <View style={{ width: '80%', }}>
-                        <Text style={[styles.topText, { color: isDarkMode ? '#eee' : '#111' }]}>{story?.text}</Text>
+                        <Text style={[styles.topText, { color: isDarkMode ? 'white' : 'black' }]}>{story?.text}</Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <Text style={[styles.storiesDetails, { color: isDarkMode ? 'gray' : '#111' }]}>
+                            <Text style={[styles.storiesDetails, { color: isDarkMode ? 'gray' : 'black' }]}>
                                 {story.poster}
                             </Text>
-                            <Text style={[styles.storiesDetails, { color: isDarkMode ? 'gray' : '#111' }]}>
+                            <Text style={[styles.storiesDetails, { color: isDarkMode ? 'gray' : 'black' }]}>
                                 {getTime(story.timePosted)}
                             </Text>
-                            <Text style={[styles.storiesDetails, { color: isDarkMode ? 'gray' : '#111' }]}>
+                            <Text style={[styles.storiesDetails, { color: isDarkMode ? 'gray' : 'black' }]}>
                                 {story.likes} likes
                             </Text>
                         </View>
@@ -259,12 +259,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     posterText: {
-        color: '#eee',
+        color: 'white',
         fontSize: 20,
         textTransform: 'uppercase',
     },
     topText: {
-        color: '#eee',
+        color: 'white',
         fontSize: 16
     },
     storiesDetails: {

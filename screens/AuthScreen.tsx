@@ -42,6 +42,8 @@ const AuthScreen: React.FC = () => {
                 bookmarks TEXT
             `);
 
+            // deleteTable(dbInstance, TABLE_NAMES.user)
+
             const user = await getCurrentUser(dbInstance);
 
             if (user) {
@@ -56,7 +58,7 @@ const AuthScreen: React.FC = () => {
         }
     }, [user])
 
-    const darkMode = { color: isDarkMode ? '#eee' : '#111' }
+    const darkMode = { color: isDarkMode ? 'white' : 'black' }
 
     const AuthForm: React.FC = () => {
 
@@ -99,7 +101,7 @@ const AuthScreen: React.FC = () => {
 
         return (
             <View style={styles.authFormContainer}>
-                <Image source={isDarkMode ? require('../Login-dark.gif') : require('../Login.gif')} style={{ width: 350, height: 350, marginBottom: 20 }} />
+                <Image source={isDarkMode ? require('../Login-dark.gif') : require('../Login.gif')} style={{ width: 320, height: 320, marginBottom: 20 }} />
 
                 {
                     error ? 
@@ -123,7 +125,7 @@ const AuthScreen: React.FC = () => {
                     onChangeText={(text) => handleFormChange(text, 'password')}
                 />
                 <TouchableOpacity style={styles.button} onPress={handleFormSubmission}>
-                    <Text style={{ fontSize: 20, color: '#eee', textAlign: 'center' }}>{authType === 'signin' ? 'LOGIN' : 'Create an Account'}</Text>
+                    <Text style={{ fontSize: 20, color: 'white', textAlign: 'center' }}>{authType === 'signin' ? 'LOGIN' : 'Create an Account'}</Text>
                 </TouchableOpacity>
                 {
                     authType === 'signup' ?
@@ -168,7 +170,7 @@ const AuthScreen: React.FC = () => {
             borderColor: 'lightgray',
             borderWidth: 0.5,
             fontSize: 16,
-            color: isDarkMode ? '#eee' : '#111'
+            color: isDarkMode ? 'white' : 'black'
         },
         button: {
             marginVertical: 15,
@@ -188,16 +190,16 @@ const AuthScreen: React.FC = () => {
 
         },
         errorText: {
-            color: '#eee',
+            color: 'white',
             fontSize: 18,
         }
     })
 
     if (isInitialized) {
         return (
-            <SafeAreaView style={{ flex: 1, backgroundColor: isDarkMode ? '#111' : '#eee' }}>
-                <StatusBar backgroundColor={isDarkMode ? '#111' : '#eee'} barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-                <ScrollView style={{ flex: 1, backgroundColor: isDarkMode ? "#111" : '#eee' }}>
+            <SafeAreaView style={{ flex: 1, backgroundColor: isDarkMode ? 'black' : 'white' }}>
+                <StatusBar backgroundColor={isDarkMode ? 'black' : 'white'} barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+                <ScrollView style={{ flex: 1, backgroundColor: isDarkMode ? "black" : 'white' }}>
                     <Header title='HackerNews' rightIcon={
                         <Pressable onPress={() => navigation.replace(RouteNames.newsScreen)}>
                             <Text style={{ color: '#ec6333', fontSize: 16, fontWeight: '600' }}>Later</Text>
@@ -209,7 +211,7 @@ const AuthScreen: React.FC = () => {
         )
     } else {
         return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: isDarkMode ? '#111' : '#eee' }}>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: isDarkMode ? 'black' : 'white' }}>
                 <ActivityIndicator color='#ec6333' />
             </View>
         )

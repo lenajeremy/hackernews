@@ -28,10 +28,10 @@ const Header: React.FC<HeaderProps> = ({ title, back, rightIcon }) => {
             <View style = {{flexDirection: 'row'}}>
             { back &&
                 <TouchableOpacity onPress = {() => navigation.goBack()}>
-                    <AntDesign name='left' size={24} color={isDarkMode ? '#eee' : '#111'} />
+                    <AntDesign name='left' size={24} color={isDarkMode ? 'white' : 'black'} />
                 </TouchableOpacity>
             }
-            <Text style={[styles.headerText, { color: isDarkMode ? '#eee' : '#111', fontSize: back ? 20 : 24, marginLeft: back ? 10 : 0}]}>
+            <Text style={[styles.headerText, { color: isDarkMode ? 'white' : 'black', fontSize: back ? 20 : 24, marginLeft: back ? 10 : 0}]}>
                 {title}
             </Text>
             </View>

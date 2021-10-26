@@ -12,8 +12,8 @@ const Skeleton: React.FC = () => {
     return (
             <View style={{ marginVertical: 4 }}>
                 <SkeletonPlaceholder
-                    backgroundColor='#eee'
-                    highlightColor='#eee'
+                    backgroundColor='lightgray'
+                    highlightColor='white'
                     direction='right'
                     speed={2000}>
                     <View style={styles.loadingNewsContainer}>

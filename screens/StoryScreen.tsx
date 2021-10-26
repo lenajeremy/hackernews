@@ -21,7 +21,7 @@ const StoryWebViewScreen: React.FC<{ route: any }> = ({ route }) => {
     const navigation = useNavigation()
     const story = route.params.story as StoryItem;
 
-    const darkMode = { color: isDarkMode ? '#eee' : '#111' }
+    const darkMode = { color: isDarkMode ? 'white' : 'black' }
 
     const StoryWebView = () => {
         return (
@@ -58,7 +58,7 @@ const StoryWebViewScreen: React.FC<{ route: any }> = ({ route }) => {
     }
 
     return (
-        <SafeAreaView style={[styles.mainScreenContainer, { backgroundColor: isDarkMode ? '#111' : '#eee' }]}>
+        <SafeAreaView style={[styles.mainScreenContainer, { backgroundColor: isDarkMode ? 'black' : 'white' }]}>
             <Header back={true} title={`Story by ${story.poster}`} />
             <StoryWebView />
             <StoryDetailsSection story={story} />
