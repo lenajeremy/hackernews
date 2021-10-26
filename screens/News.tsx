@@ -7,9 +7,9 @@ import {
     ActivityIndicator,
     StyleSheet,
     useColorScheme,
-    Alert,
     StatusBar,
     Image,
+    Pressable,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -21,6 +21,7 @@ import { Skeleton, Header } from '../components'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/core';
 import { RouteNames } from '../constants';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 
 
 export interface StoryItem {
@@ -37,6 +38,7 @@ function NewsScreen() {
 
     const [pageNumber, setPageNumber] = useState(0);
     const isDarkMode = useColorScheme() === 'dark';
+    const [newsType, setNewsType] = useState<StoryType>(StoryType.top);
 
     const STORIES_PER_PAGE = 15;
 
@@ -47,7 +49,7 @@ function NewsScreen() {
     const loadStories = (operation : 'new' | 'append') => {
         dispatch(getStories(
             {
-                storyType: StoryType.top, 
+                storyType: newsType, 
                 operation,
                 lastStoryId: news[(news.length - 1) as number],
                 storyCount: STORIES_PER_PAGE,
@@ -59,7 +61,7 @@ function NewsScreen() {
 
     useEffect(() => {
         loadStories('new')
-    }, [])
+    }, [newsType])
 
     function _renderNews({ item: item }: { item: number }) {
 
@@ -110,7 +112,11 @@ function NewsScreen() {
         return (
             <SafeAreaView style={{ backgroundColor: isDarkMode ? '#000' : 'white', flex: 1 }}>
                 <StatusBar barStyle = {isDarkMode ? 'light-content' : 'dark-content'} backgroundColor = {isDarkMode ? '#000' : 'white'}/>
-                <Header title="HackerNews" />
+                <Header title="HackerNews" rightIcon = {
+                    <Pressable onPress = {() => setNewsType(newsType => newsType === StoryType.new ? StoryType.top : StoryType.new)}>
+                        <Ionicon size = {26} color = {isDarkMode ? '#fff' : '#000'} name = {newsType === StoryType.new ? 'ios-logo-designernews' : 'trending-up-sharp'} />
+                    </Pressable>
+                }/>
                 <FlatList
                     contentContainerStyle={{
                         marginTop: 10

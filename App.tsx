@@ -6,7 +6,7 @@ import { RouteNames } from './constants';
 import { Provider } from 'react-redux';
 import SqliteProvider from './sqlite3/SqliteProvider';
 import SplashScreen from 'react-native-splash-screen';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
 /* SCREENS */
@@ -33,14 +33,14 @@ function BottomTabs() {
         name='homeTab'
         component={News}
         options={{
-          tabBarIcon: ({ focused }) => <Ionicons name='logo-windows' color={focused ? '#ec6333' : 'gray'} size = {24} />
+          tabBarIcon: ({ focused }) => <FontAwesome name='hacker-news' color={focused ? '#ec6333' : 'gray'} size = {30} />
         }}
       />
       <Tabs.Screen
         name='aboutTab'
         component={AboutMe}
         options={{
-          tabBarIcon: ({ focused }) => <Ionicons name='person' color={focused ? '#ec6333' : 'gray'} size = {24} />
+          tabBarIcon: ({ focused }) => <FontAwesome name='user' color={focused ? '#ec6333' : 'gray'} size = {28} />
         }}
       />
     </Tabs.Navigator>
