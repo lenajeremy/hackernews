@@ -26,7 +26,7 @@ function BottomTabs() {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: isDarkMode ? '#111' : '#c3c3c3'
+          backgroundColor: isDarkMode ? '#111' : '#eee'
         },
       }}
     >

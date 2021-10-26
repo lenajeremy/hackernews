@@ -12,7 +12,7 @@ const Skeleton: React.FC = () => {
     return (
             <View style={{ marginVertical: 4 }}>
                 <SkeletonPlaceholder
-                    backgroundColor='#c3c3c3'
+                    backgroundColor='#eee'
                     highlightColor='#eee'
                     direction='right'
                     speed={2000}>
