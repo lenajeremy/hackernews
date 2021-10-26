@@ -8,6 +8,7 @@ import {
     Text,
     ScrollView,
     TextInput,
+    Image,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Header } from '../components';
@@ -33,7 +34,8 @@ const AuthScreen: React.FC = () => {
         }
         return (
             <View style={styles.authFormContainer}>
-                <Text style={[styles.authFormText, darkMode]}>{authType === 'signin' ? 'Login' : 'Sign Up'}</Text>
+                <Image source = {isDarkMode ? require('../Login-dark.gif') : require('../Login.gif')} style = {{width: 350, height: 350, marginBottom: 30}}/>
+
                 <TextInput
                     placeholder='Enter your username'
                     style={styles.inputField}
@@ -77,6 +79,34 @@ const AuthScreen: React.FC = () => {
         )
     }
 
+    const styles = StyleSheet.create({
+        authFormContainer: {
+            paddingHorizontal: 20,
+            flex: 1,
+            alignItems: 'center',
+            // justifyContent: 'center',
+        },
+        inputField: {
+            width: 330,
+            marginVertical: 5,
+            padding: 10,
+            height: 48,
+            borderRadius: 8,
+            borderColor: 'lightgray',
+            borderWidth: 0.5,
+            fontSize: 16,
+            color: isDarkMode ? 'white' : 'black'
+        },
+        button: {
+            marginVertical: 15,
+            backgroundColor: '#ec6333',
+            padding: 10,
+            borderRadius: 10,
+            width: 330,
+            height: 56,
+            justifyContent: 'center'
+        }
+    })
     
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: isDarkMode ? "#000" : '#fff' }}>
@@ -84,39 +114,10 @@ const AuthScreen: React.FC = () => {
             <AuthForm />
         </SafeAreaView>
     )
+
+    
 }
 
 
-const styles = StyleSheet.create({
-    authFormContainer: {
-        paddingHorizontal: 20,
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    authFormText: {
-        marginBottom: 50,
-        fontSize: 30,
-    },
-    inputField: {
-        width: 330,
-        marginVertical: 10,
-        padding: 10,
-        height: 48,
-        borderRadius: 8,
-        borderColor: 'gray',
-        borderWidth: 0.5,
-        fontSize: 16,
-        color: 'white'
-    },
-    button: {
-        marginVertical: 15,
-        backgroundColor: '#ec6333',
-        padding: 10,
-        borderRadius: 10,
-        width: 330,
-        height: 56,
-        justifyContent: 'center'
-    }
-})
+
 export default AuthScreen;

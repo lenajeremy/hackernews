@@ -61,7 +61,7 @@ const Component: React.FC = () => {
       <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator
-            initialRouteName={RouteNames.newsScreen}
+            initialRouteName={RouteNames.authScreen}
             screenOptions={{
               headerShown: false,
             }}
