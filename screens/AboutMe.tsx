@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-    SafeAreaView,
+    Platform,
     Text,
     StyleSheet,
     View,
@@ -134,9 +134,9 @@ const styles = StyleSheet.create({
     animatedDotsContainer: {
         flexDirection: 'row',
         marginHorizontal: 10,
-        height: 6,
+        height: 4,
         borderRadius: 20,
-        top: 45,
+        top: Platform.OS === 'android' ? 10 : 45,
         zIndex: 1
     },
     animatedDot: {
