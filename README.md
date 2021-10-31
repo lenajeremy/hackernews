@@ -1,5 +1,6 @@
 # What the app is about?
-It's an app that uses the HackerNews API to display the latest news in the world of tech and programming.\ After a few days of installing on my phone, I've found myself checking the app at least twice daily to check for trending stories on HackerNews.\
+It's an app that uses the HackerNews API to display the latest news in the world of tech and programming.\
+After a few days of installing on my phone, I've found myself checking the app at least twice daily to check for trending stories on HackerNews.\
 Each HackerNews story has a `URL` which links to an article. These articles can be read within the app and does not require opening an external browser to read stories.
 
 # Features
