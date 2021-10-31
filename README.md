@@ -9,6 +9,12 @@ Each HackerNews story has a `URL` which links to an article. These articles can 
 - Read articles on the app
 - Most Popular Storires on the Internet about Tech
 
+# Technologies
+- React Native
+- React Native Reanimated
+- React Native SQLite Database
+
+
 # Steps to run the app
 
 - After unzipping the file,
