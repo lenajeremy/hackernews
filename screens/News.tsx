@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   SafeAreaView,
   View,
@@ -265,6 +265,11 @@ const NewsType: React.FC<{type: StoryType; item: number}> = ({type, item}) => {
     else if (MINUTES > 0) return MINUTES + `min${MINUTES > 1 ? 's' : ''} ago`;
   };
 
+  const color = useMemo(
+    () => COLORS[Math.floor(Math.random() * COLORS.length)],
+    [],
+  );
+
   if (loaded) {
     return (
       <TouchableOpacity
@@ -275,8 +280,7 @@ const NewsType: React.FC<{type: StoryType; item: number}> = ({type, item}) => {
             style={[
               styles.news,
               {
-                backgroundColor:
-                  COLORS[Math.floor(Math.random() * COLORS.length)],
+                backgroundColor: color,
               },
             ]}>
             <Text style={styles.posterText}>
